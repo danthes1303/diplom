@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "messages") // Укажите имя вашей таблицы в базе данных
+@Table(name = "messages")
 public class Message {
 
     @Id
@@ -18,7 +18,7 @@ public class Message {
     @Column(name = "email")
     private String email;
 
-    @Column(name = "message", columnDefinition = "TEXT")  // Используем TEXT для длинных сообщений
+    @Column(name = "message", columnDefinition = "TEXT")
     private String message;
 
     @Column(name = "submit_date")

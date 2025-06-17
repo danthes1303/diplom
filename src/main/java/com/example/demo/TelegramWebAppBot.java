@@ -17,21 +17,18 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-@Component  //  Делаем TelegramWebAppBot компонентом Spring
+@Component
 public class TelegramWebAppBot extends TelegramLongPollingBot {
 
     private static final Logger LOGGER = Logger.getLogger(TelegramWebAppBot.class.getName());
 
-    // Замени YOUR_BOT_TOKEN на токен своего бота
-    private static final String BOT_TOKEN = "7865867313:AAFYKyoYh-6TuGDdF-qV0RyoI3U0ytDs4E0";
+    private static final String BOT_TOKEN = "7865867313:AAEHAGjAGv48_eEnQp2OcRI6y4oBvonRJjI";
 
-    // Замени YOUR_BOT_USERNAME на имя своего бота
     private static final String BOT_USERNAME = "@ppportfolio_bbbot";
 
-    // Замени YOUR_WEB_APP_URL на URL твоего сайта
     private static final String WEB_APP_URL = "https://danthes1303.github.io/";
 
-    @PostConstruct  // Этот метод будет вызван после создания бина
+    @PostConstruct
     public void init() {
         try {
             TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
@@ -66,11 +63,9 @@ public class TelegramWebAppBot extends TelegramLongPollingBot {
                     sendMessage(chatId, "Я не понимаю эту команду.");
             }
         } else if (update.hasCallbackQuery()) {
-            // Обработка данных, возвращенных из Web App (необязательно на первом этапе).
             String callbackData = update.getCallbackQuery().getData();
             long chatId = update.getCallbackQuery().getMessage().getChatId();
 
-            // Здесь можно обработать данные из Web App
             sendMessage(chatId, "Получены данные из Web App: " + callbackData);
 
         }
@@ -82,24 +77,22 @@ public class TelegramWebAppBot extends TelegramLongPollingBot {
         message.setChatId(String.valueOf(chatId));
         message.setText(answer);
 
-        // Создаем inline-кнопку для запуска Web App
         InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
         List<InlineKeyboardButton> rowInline = new ArrayList<>();
         InlineKeyboardButton webAppButton = new InlineKeyboardButton();
         webAppButton.setText("Открыть Web App");
 
-        // Создаем WebAppInfo объект
         WebAppInfo webAppInfo = new WebAppInfo(WEB_APP_URL);
 
-        webAppButton.setWebApp(webAppInfo); // Устанавливаем WebAppInfo
+        webAppButton.setWebApp(webAppInfo);
         rowInline.add(webAppButton);
         rowsInline.add(rowInline);
         markupInline.setKeyboard(rowsInline);
         message.setReplyMarkup(markupInline);
 
         try {
-            execute(message); // Отправляем сообщение
+            execute(message);
         } catch (TelegramApiException e) {
             LOGGER.log(Level.SEVERE, "Error sending message: " + e.getMessage(), e);
         }
